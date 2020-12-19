@@ -32,7 +32,7 @@ class UsersController extends Controller
             if($user->role =='admin'){
                 return redirect()->route('users.admin.home');
             }else{
-                // return redirect()->route('users.employee.home');
+                return redirect()->route('products.employee.home');
             }
         }
         else{
@@ -67,7 +67,7 @@ class UsersController extends Controller
     {
         $req->validate([
             'name' => 'required',
-            'username' => 'required',
+            'username' => 'required|unique:users,username',
             'contactno' => 'required',
             'role' => 'required',
             'password'=> 'required'
@@ -84,17 +84,6 @@ class UsersController extends Controller
         $req->session()->flash('msg','User added successfully.');
         $req->session()->flash('type','success');            
         return redirect()->route('users.admin.home');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Users  $users
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Users $users)
-    {
-        //
     }
 
     /**

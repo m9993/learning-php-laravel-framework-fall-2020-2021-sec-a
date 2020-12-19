@@ -29,5 +29,11 @@ Route::group(['middleware'=>['profile']], function(){
     Route::get('/userAdminDelete/{id}', 'UsersController@destroy')->name('users.admin.delete');
     Route::get('/userAdminSearch', 'UsersController@search')->name('users.admin.search');
 
-    // Route::get('/employeeHome', 'UsersController@employeeHome')->name('users.admin.home');
+    // employee
+    Route::get('/employeeHome', 'ProductsController@employeeHome')->name('products.employee.home');
+    Route::get('/productsCreate', 'ProductsController@create')->name('products.employee.create');
+    Route::post('/productsCreate', 'ProductsController@store')->name('products.employee.create');
+    Route::get('/productEmployeeEdit/{id}', 'ProductsController@edit')->name('products.employee.edit');
+    Route::post('/productEmployeeEdit/{id}', 'ProductsController@update')->name('products.employee.edit');
+    Route::get('/productEmployeeDelete/{id}', 'ProductsController@destroy')->name('products.employee.delete');
 });
