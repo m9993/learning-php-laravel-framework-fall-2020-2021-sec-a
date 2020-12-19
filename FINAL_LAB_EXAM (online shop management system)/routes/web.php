@@ -27,6 +27,7 @@ Route::group(['middleware'=>['profile']], function(){
     Route::get('/userAdminEdit/{id}', 'UsersController@edit')->name('users.admin.edit');
     Route::post('/userAdminEdit/{id}', 'UsersController@update')->name('users.admin.edit');
     Route::get('/userAdminDelete/{id}', 'UsersController@destroy')->name('users.admin.delete');
+    Route::get('/userAdminSearch', 'UsersController@search')->name('users.admin.search');
 
     // Route::get('/employeeHome', 'UsersController@employeeHome')->name('users.admin.home');
 });

@@ -151,4 +151,19 @@ class UsersController extends Controller
         $req->session()->flash('type','success');            
         return redirect()->route('users.admin.home');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Users  $users
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $req)
+    {   $key = $req->get('key');
+        if($req->ajax()){
+            $allUsers=Users::where('name','like', '%'.$key.'%')->get();
+
+            echo json_encode($allUsers);    
+        }
+    }
 }
