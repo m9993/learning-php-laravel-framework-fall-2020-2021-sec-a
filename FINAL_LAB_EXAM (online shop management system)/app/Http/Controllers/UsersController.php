@@ -18,7 +18,7 @@ class UsersController extends Controller
     }
     public function verifyLogin(Request $req)
     {
-        $validation=$req->validate([
+        $req->validate([
             'username' => 'required',
             'password'=> 'required'
         ]);
@@ -28,21 +28,23 @@ class UsersController extends Controller
                     ->first();
         
         if($user){
-            if($user->type =='admin'){
-                return redirect()->route('users.adminHome');
+            $req->session()->put('profile',$user);
+            if($user->role =='admin'){
+                return redirect()->route('users.admin.home');
             }else{
-                return redirect()->route('users.adminHome');
+                // return redirect()->route('users.employee.home');
             }
         }
         else{
             $req->session()->flash('msg','Wrong username or password.');
-            $req->session()->flash('type','danger');
+            $req->session()->flash('type','danger');            
+            return redirect()->back();
         }
     }
 
-    public function index()
-    {
-        //
+    public function adminHome()
+    {   $allUsers=Users::all();
+        return view('users.adminHome')->with('allUsers',$allUsers);
     }
 
     /**
@@ -52,7 +54,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+       return view('users.usersCreate');
     }
 
     /**
@@ -61,9 +63,27 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+        $req->validate([
+            'name' => 'required',
+            'username' => 'required',
+            'contactno' => 'required',
+            'role' => 'required',
+            'password'=> 'required'
+        ]);
+
+        $user = new Users();
+        $user->name         = $req->name;
+        $user->username     = $req->username;
+        $user->password     = $req->password;
+        $user->contactno    = $req->contactno;
+        $user->role         = $req->role;
+        $user->save();
+       
+        $req->session()->flash('msg','User added successfully.');
+        $req->session()->flash('type','success');            
+        return redirect()->route('users.admin.home');
     }
 
     /**
@@ -83,9 +103,9 @@ class UsersController extends Controller
      * @param  \App\Users  $users
      * @return \Illuminate\Http\Response
      */
-    public function edit(Users $users)
-    {
-        //
+    public function edit($id)
+    {   $user = Users::find($id);
+        return view('users.usersEdit', $user);
     }
 
     /**
@@ -95,9 +115,27 @@ class UsersController extends Controller
      * @param  \App\Users  $users
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Users $users)
+    public function update(Request $req, $id)
     {
-        //
+        $req->validate([
+            'name' => 'required',
+            'username' => 'required',
+            'contactno' => 'required',
+            'role' => 'required',
+            'password'=> 'required'
+        ]);
+
+        $user = Users::find($id);
+        $user->name         = $req->name;
+        $user->username     = $req->username;
+        $user->password     = $req->password;
+        $user->contactno    = $req->contactno;
+        $user->role         = $req->role;
+        $user->save();
+
+        $req->session()->flash('msg','User updated successfully.');
+        $req->session()->flash('type','success');            
+        return redirect()->route('users.admin.home');
     }
 
     /**
@@ -106,8 +144,11 @@ class UsersController extends Controller
      * @param  \App\Users  $users
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Users $users)
+    public function destroy($id, Request $req)
     {
-        //
+        Users::find($id)->delete();
+        $req->session()->flash('msg','User deleted successfully.');
+        $req->session()->flash('type','success');            
+        return redirect()->route('users.admin.home');
     }
 }

@@ -16,7 +16,7 @@
       <h5>Login</h5>
 
       @if(count($errors)>0)
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-danger p-3" role="alert">
       @foreach($errors->all() as $err)
       {{$err}} <br>
 	  	@endforeach
@@ -24,7 +24,7 @@
 	  	@endif
 
       @if(session('msg'))
-      <div class="alert alert-".{{$type}} role="alert">
+      <div class="'alert alert-{{session('type')}} p-3" role="alert">
       {{session('msg')}}
       </div>
 	  	@endif
